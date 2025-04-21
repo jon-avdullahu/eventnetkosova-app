@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventNet Kosovo - Event Connectivity Solutions
+
+EventNet Kosovo is a specialized mobile network service provider offering temporary internet and networking solutions for events of all sizes.
+
+## Overview
+
+This website showcases EventNet Kosovo's plug-and-play mesh network rental service for events, construction sites, and temporary venues. The service includes pre-configured mesh routers that auto-connect with a web dashboard for monitoring.
+
+## Features
+
+- Modern, responsive design
+- Dark mode support
+- Comprehensive sections covering services, pricing, testimonials, and more
+- Contact form for inquiries
+- Animated UI elements with Framer Motion
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Framer Motion for animations
+- React Icons
+- Deployed on Vercel
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repository and install dependencies:
+
+```bash
+git clone <repository-url>
+cd eventnet-kosovo
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This website is configured for easy deployment on Vercel. Simply push to your GitHub repository and connect it to Vercel for automatic deployments.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+- `/src/components` - UI components for the website
+- `/src/app` - Next.js app directory with page components and global styles
+- `/public` - Static assets
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Deploy on Vercel
+## Contact
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For inquiries about the EventNet Kosovo service, please contact:
+- Email: contact@eventnet-ks.com
+- Phone: +383 44 123 456
