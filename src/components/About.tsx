@@ -84,9 +84,15 @@ const About = () => {
                   <div className="text-gray-900 dark:text-white font-medium">Year Founded</div>
                   <div className="text-gray-900 dark:text-white font-medium">2025</div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Team Size</div>
                   <div className="text-gray-900 dark:text-white font-medium">5 Networking Professionals</div>
+                </div>
+                <div className="flex items-start justify-between">
+                  <div className="text-gray-900 dark:text-white font-medium">Members</div>
+                  <div className="text-gray-900 dark:text-white font-medium text-right">
+                    Jon Avdullahu, Nol Ahmedi, Art Krasniqi, Taulant Parduzi, Drin Krasniqi
+                  </div>
                 </div>
               </div>
             </div>
