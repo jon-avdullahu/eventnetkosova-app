@@ -48,7 +48,7 @@ const About = () => {
           >
             <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Story</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              EventNet Kosovo was founded in 2023 by a team of networking professionals who saw a gap in Kosovo's event industry: reliable, professional temporary connectivity solutions.
+              EventNet Kosovo was founded in 2025 by a team of networking professionals who saw a gap in Kosovo's event industry: reliable, professional temporary connectivity solutions.
             </p>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
               After experiencing firsthand the challenges of poor connectivity at local events, our founders decided to combine their expertise in networking technology to create a service that would ensure seamless connectivity for events of all types and sizes.
@@ -83,7 +83,7 @@ const About = () => {
                 </div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Year Founded</div>
-                  <div className="text-gray-900 dark:text-white font-medium">2023</div>
+                  <div className="text-gray-900 dark:text-white font-medium">2025</div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="text-gray-900 dark:text-white font-medium">Team Size</div>
