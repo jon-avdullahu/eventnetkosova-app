@@ -39,7 +39,7 @@ export default function Home() {
         if (section && section.offsetTop <= scrollPosition) {
           setActiveSection(sections[i]);
           // Update URL hash without scrolling
-          history.replaceState(null, null, `#${sections[i] !== 'hero' ? sections[i] : ''}`);
+          history.replaceState({}, '', `#${sections[i] !== 'hero' ? sections[i] : ''}`);
           break;
         }
       }
