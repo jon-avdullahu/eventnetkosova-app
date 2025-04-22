@@ -76,23 +76,24 @@ const About = () => {
                 </div>
               </div>
               <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Areas Served</div>
-                  <div className="text-gray-900 dark:text-white font-medium">Prishtina, Prizren, Peja, All Kosovo</div>
+                  <div className="text-gray-900 dark:text-white font-medium col-span-2 text-right">Prishtina, Prizren, Peja, All Kosovo</div>
                 </div>
-                <div className="flex items-center justify-between mb-4">
+                
+                <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Year Founded</div>
-                  <div className="text-gray-900 dark:text-white font-medium">2025</div>
+                  <div className="text-gray-900 dark:text-white font-medium col-span-2 text-right">2025</div>
                 </div>
-                <div className="flex items-center justify-between mb-4">
+                
+                <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Team Size</div>
-                  <div className="text-gray-900 dark:text-white font-medium">5 Networking Professionals</div>
+                  <div className="text-gray-900 dark:text-white font-medium col-span-2 text-right">5 Networking Professionals</div>
                 </div>
-                <div className="flex items-start justify-between">
+                
+                <div className="grid grid-cols-3 gap-4">
                   <div className="text-gray-900 dark:text-white font-medium">Members</div>
-                  <div className="text-gray-900 dark:text-white font-medium text-right">
-                    Jon Avdullahu, Nol Ahmedi, Art Krasniqi, Taulant Parduzi, Drin Krasniqi
-                  </div>
+                  <div className="text-gray-900 dark:text-white font-medium col-span-2 text-right">Jon Avdullahu, Nol Ahmedi, Art Krasniqi, Taulant Parduzi, Drin Krasniqi</div>
                 </div>
               </div>
             </div>
