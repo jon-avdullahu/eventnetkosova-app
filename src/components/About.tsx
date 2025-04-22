@@ -71,7 +71,6 @@ const About = () => {
                 {/* This would be an actual image in production */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500/80 to-secondary-500/80 flex items-center justify-center">
                   <div className="text-center text-white p-8">
-                    <div className="text-5xl font-bold mb-2">500+</div>
                     <div className="text-xl"></div>
                   </div>
                 </div>
