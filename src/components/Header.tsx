@@ -31,6 +31,9 @@ const Header = () => {
           <Link href="#pricing" className="text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400">
             Pricing
           </Link>
+          <Link href="#team" className="text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400">
+            Our Team
+          </Link>
           <Link href="#about" className="text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400">
             About
           </Link>
@@ -80,6 +83,13 @@ const Header = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Pricing
+              </Link>
+              <Link 
+                href="#team" 
+                className="text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                Our Team
               </Link>
               <Link 
                 href="#about" 

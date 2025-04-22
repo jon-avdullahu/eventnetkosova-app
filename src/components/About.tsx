@@ -72,14 +72,14 @@ const About = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500/80 to-secondary-500/80 flex items-center justify-center">
                   <div className="text-center text-white p-8">
                     <div className="text-5xl font-bold mb-2">500+</div>
-                    <div className="text-xl">Events Successfully Connected</div>
+                    <div className="text-xl"></div>
                   </div>
                 </div>
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Areas Served</div>
-                  <div className="text-gray-900 dark:text-white font-medium">Pristina, Prizren, Peja, All Kosovo</div>
+                  <div className="text-gray-900 dark:text-white font-medium">Prishtina, Prizren, Peja, All Kosovo</div>
                 </div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-gray-900 dark:text-white font-medium">Year Founded</div>
@@ -87,7 +87,7 @@ const About = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="text-gray-900 dark:text-white font-medium">Team Size</div>
-                  <div className="text-gray-900 dark:text-white font-medium">12 Networking Professionals</div>
+                  <div className="text-gray-900 dark:text-white font-medium">5 Networking Professionals</div>
                 </div>
               </div>
             </div>
