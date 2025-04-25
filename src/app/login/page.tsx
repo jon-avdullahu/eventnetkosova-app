@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -37,7 +38,6 @@ export default function LoginPage() {
         redirect: false,
         email,
         password,
-        callbackUrl: "/"
       });
       
       console.log("Sign in result:", result);
@@ -47,7 +47,14 @@ export default function LoginPage() {
         return;
       }
       
-      router.push("/");
+      // Set success state instead of immediate redirect
+      if (result?.ok) {
+        setSuccess(true);
+        // Delay redirect to show success message
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
+      }
     } catch (error) {
       console.error("Login error:", error);
       setError("Something went wrong. Please try again.");
@@ -75,6 +82,12 @@ export default function LoginPage() {
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-4">
             <p className="text-red-700">{error}</p>
+          </div>
+        )}
+        
+        {success && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 mt-4">
+            <p className="text-green-700">Login successful! Redirecting...</p>
           </div>
         )}
         
@@ -118,10 +131,10 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || success}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-400"
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Signing in..." : success ? "Success!" : "Sign in"}
             </button>
           </div>
           
