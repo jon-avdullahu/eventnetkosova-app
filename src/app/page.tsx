@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
 import HowItWorks from '@/components/HowItWorks';
@@ -50,9 +49,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <Header activeSection={activeSection} />
-      
+    <div className="pt-16"> {/* Add padding to account for fixed header */}
       <SectionTransition id="hero">
         <Hero />
       </SectionTransition>
@@ -82,6 +79,6 @@ export default function Home() {
       </SectionTransition>
       
       <Footer />
-    </main>
+    </div>
   );
 }

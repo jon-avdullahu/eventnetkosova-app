@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import UserNav from "./UserNav";
 
 const navLinkVariants = {
   hidden: { opacity: 0, y: -10 },
@@ -42,7 +43,7 @@ const Header = ({ activeSection = "" }: HeaderProps) => {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center">
+        <nav className="hidden md:flex items-center space-x-2">
           <motion.div
             custom={0}
             initial="hidden"
@@ -108,25 +109,39 @@ const Header = ({ activeSection = "" }: HeaderProps) => {
             initial="hidden"
             animate="visible"
             variants={navLinkVariants}
+            className="mr-4"
           >
             <Link 
               href="#contact" 
-              className="btn btn-primary ml-2"
+              className="btn btn-primary"
               onClick={handleNavClick}
             >
               Get Started
             </Link>
           </motion.div>
+          
+          <motion.div
+            custom={5}
+            initial="hidden"
+            animate="visible"
+            variants={navLinkVariants}
+            className="border-l border-gray-200 dark:border-gray-700 pl-4"
+          >
+            <UserNav />
+          </motion.div>
         </nav>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-gray-700 dark:text-gray-200"
-          onClick={toggleMenu}
-          aria-label={isOpen ? "Close Menu" : "Open Menu"}
-        >
-          {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
+        {/* Mobile Menu Button and User Nav for Mobile */}
+        <div className="md:hidden flex items-center space-x-4">
+          <UserNav />
+          <button 
+            className="text-gray-700 dark:text-gray-200"
+            onClick={toggleMenu}
+            aria-label={isOpen ? "Close Menu" : "Open Menu"}
+          >
+            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
