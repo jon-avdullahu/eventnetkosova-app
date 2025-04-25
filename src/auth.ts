@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import connectDB from "./lib/mongodb";
 import User from "./models/User";
-import type { DefaultSession, NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, DefaultSession } from "next-auth";
 
 // Extend the session type to include user ID
 declare module "next-auth" {
@@ -14,7 +14,7 @@ declare module "next-auth" {
   }
 }
 
-// Set runtime to nodejs to prevent edge runtime issues
+// Force NodeJS runtime to prevent edge runtime issues
 export const runtime = "nodejs";
 
 // Define user type
@@ -25,7 +25,7 @@ interface UserType {
   image?: string;
 }
 
-// Define the auth config with proper types
+// Define NextAuth configuration
 export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -43,7 +43,7 @@ export const authConfig: NextAuthOptions = {
           
           await connectDB();
           
-          // Cast to any to avoid TypeScript errors with Mongoose
+          // Use as any to avoid type issues
           const userModel = User as any;
           const user = await userModel.findOne({ email: credentials.email });
           
@@ -100,5 +100,5 @@ export const authConfig: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
 };
 
-// Export just the auth function
-export const auth = NextAuth(authConfig).auth; 
+// Auth function to be used in middleware or server components
+export const { auth } = NextAuth(authConfig); 
