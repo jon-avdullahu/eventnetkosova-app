@@ -32,7 +32,8 @@ export default function RegisterPage() {
         timestamp: new Date().toISOString(),
         email,
         name,
-        attemptTime: Date.now()
+        attemptTime: Date.now(),
+        url: "/api/auth/register"
       };
       
       // Perform registration
@@ -44,27 +45,82 @@ export default function RegisterPage() {
         body: JSON.stringify({ name, email, password }),
       });
       
-      // Get response data
-      const data = await response.json();
-      
-      // Update debug info
+      // Update debug info with response details
       debugData.status = response.status;
-      debugData.response = data;
+      debugData.statusText = response.statusText;
+      debugData.headers = Object.fromEntries([...response.headers]);
+      
+      // Get response data
+      let data;
+      try {
+        data = await response.json();
+        debugData.response = data;
+      } catch (jsonError) {
+        debugData.jsonError = String(jsonError);
+        debugData.responseText = await response.text();
+      }
+      
       debugData.responseTime = Date.now();
       setDebugInfo(debugData);
       
       console.log("Registration response:", response.status, data);
       
       if (!response.ok) {
-        setError(data.message || "Registration failed");
+        setError(data?.message || `Registration failed with status: ${response.status}`);
       } else {
         setSuccess(true);
         setError("");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      setError("Something went wrong. Please try again.");
-      setDebugInfo({ error: String(error) });
+      setError(`Network error: ${String(error)}`);
+      setDebugInfo({ error: String(error), type: "network" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Test the direct connection to MongoDB
+  const testConnection = async () => {
+    try {
+      setLoading(true);
+      
+      const response = await fetch("/api/auth/debug", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      const testData = {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries([...response.headers]),
+      };
+      
+      try {
+        const data = await response.json();
+        setDebugInfo({
+          ...testData,
+          data,
+          timestamp: new Date().toISOString()
+        });
+      } catch (jsonError) {
+        setDebugInfo({
+          ...testData,
+          jsonError: String(jsonError),
+          responseText: await response.text(),
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+    } catch (error) {
+      console.error("Connection test error:", error);
+      setDebugInfo({
+        error: String(error),
+        type: "testConnection",
+        timestamp: new Date().toISOString()
+      });
     } finally {
       setLoading(false);
     }
@@ -151,13 +207,22 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <div>
+            <div className="flex flex-col space-y-3">
               <button
                 type="submit"
                 disabled={loading}
                 className="group relative flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-400"
               >
                 {loading ? "Creating account..." : "Sign up"}
+              </button>
+              
+              <button
+                type="button"
+                onClick={testConnection}
+                disabled={loading}
+                className="group relative flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-200"
+              >
+                Test Connection
               </button>
             </div>
             
@@ -173,7 +238,16 @@ export default function RegisterPage() {
         )}
         
         {debugInfo && (
-          <div className="mt-6 text-xs bg-gray-100 p-4 rounded overflow-auto max-h-40">
+          <div className="mt-6 text-xs bg-gray-100 p-4 rounded overflow-auto max-h-60">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-bold">Debug Information</span>
+              <button 
+                onClick={() => navigator.clipboard.writeText(JSON.stringify(debugInfo, null, 2))}
+                className="text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+              >
+                Copy
+              </button>
+            </div>
             <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
           </div>
         )}

@@ -11,6 +11,48 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [debugInfo, setDebugInfo] = useState<any>(null);
 
+  const handleDirectCredentials = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      
+      // Make a direct API call to debug
+      const response = await fetch("/api/auth/callback/credentials", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          callbackUrl: window.location.origin,
+          json: true
+        }),
+      });
+      
+      setDebugInfo({
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries([...response.headers]),
+        url: response.url
+      });
+      
+      try {
+        const data = await response.json();
+        setDebugInfo(prev => ({ ...prev, data }));
+      } catch (e) {
+        setDebugInfo(prev => ({ ...prev, responseError: String(e) }));
+      }
+      
+    } catch (error) {
+      console.error("Direct API error:", error);
+      setError("API connection error: " + String(error));
+      setDebugInfo({ directApiError: String(error) });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -27,17 +69,22 @@ export default function LoginPage() {
       console.log("Login attempt with:", email);
       
       // Create debug info
-      const debugData = {
+      const debugData: any = {
         timestamp: new Date().toISOString(),
         email,
         attemptTime: Date.now()
       };
+      
+      // Perform login with callbackUrl set to current origin
+      const absoluteCallbackUrl = window.location.origin;
+      debugData.callbackUrl = absoluteCallbackUrl;
       
       // Perform login
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
+        callbackUrl: absoluteCallbackUrl
       });
       
       // Update debug info
@@ -51,7 +98,10 @@ export default function LoginPage() {
         setError(result.error || "Login failed");
       } else if (result?.ok) {
         setError("");
-        // Redirect will happen via client-side router after component remounts with new session
+        // Show success message
+        setDebugInfo(prev => ({ ...prev, status: "success", message: "Login successful! Redirecting..." }));
+        // Manually redirect
+        window.location.href = result.url || absoluteCallbackUrl;
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -113,13 +163,22 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col space-y-3">
             <button
               type="submit"
               disabled={loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-400"
             >
               {loading ? "Signing in..." : "Sign in"}
+            </button>
+            
+            <button
+              type="button"
+              onClick={handleDirectCredentials}
+              disabled={loading}
+              className="group relative flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-200"
+            >
+              Debug API Call
             </button>
           </div>
           
@@ -134,7 +193,16 @@ export default function LoginPage() {
         </form>
         
         {debugInfo && (
-          <div className="mt-6 text-xs bg-gray-100 p-4 rounded overflow-auto max-h-40">
+          <div className="mt-6 text-xs bg-gray-100 p-4 rounded overflow-auto max-h-60">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-bold">Debug Information</span>
+              <button 
+                onClick={() => navigator.clipboard.writeText(JSON.stringify(debugInfo, null, 2))}
+                className="text-xs bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+              >
+                Copy
+              </button>
+            </div>
             <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
           </div>
         )}
