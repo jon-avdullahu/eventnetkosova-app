@@ -60,3 +60,44 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 For inquiries about the EventNet Kosovo service, please contact:
 - Email: contact@eventnet-ks.com
 - Phone: +383 44 123 456
+
+## MongoDB Integration
+
+This application now includes MongoDB integration for user authentication. To set it up:
+
+1. Create a MongoDB Atlas account at [https://www.mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a new cluster and database
+3. Get your MongoDB connection string from the Atlas dashboard
+4. Create a `.env.local` file in the root of your project with the following variables:
+
+```
+MONGODB_URI=your_mongodb_connection_string
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_string
+```
+
+You can generate a secure secret with `openssl rand -base64 32` or use any random string generator.
+
+## Deploying to Vercel
+
+This application is configured for easy deployment to Vercel. Follow these steps:
+
+1. Push your code to a GitHub repository
+2. Sign up for a Vercel account and connect your GitHub account
+3. Create a new project in Vercel and import your repository
+4. Add the following environment variables in Vercel's dashboard under Settings > Environment Variables:
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `NEXTAUTH_URL`: Your production URL (e.g., https://your-app.vercel.app)
+   - `NEXTAUTH_SECRET`: A secure random string for session encryption
+
+Once deployed, your application will handle user authentication and MongoDB integration automatically.
+
+## Authentication Features
+
+The application now includes:
+
+- User registration with secure password hashing
+- User login with credentials (email/password)
+- Protected routes that require authentication
+- User session management
+- Responsive login/register forms

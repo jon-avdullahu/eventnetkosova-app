@@ -6,6 +6,12 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
+  webpack: (config) => {
+    return config;
+  }
 };
 
 module.exports = nextConfig; 
