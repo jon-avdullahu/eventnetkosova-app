@@ -31,14 +31,19 @@ export default function LoginPage() {
       setLoading(true);
       setError("");
       
+      console.log("Attempting to sign in with:", email);
+      
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
+        callbackUrl: "/"
       });
       
+      console.log("Sign in result:", result);
+      
       if (result?.error) {
-        setError("Invalid email or password");
+        setError(result.error || "Invalid email or password");
         return;
       }
       

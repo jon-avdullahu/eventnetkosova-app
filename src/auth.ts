@@ -34,50 +34,58 @@ export const authConfig: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      // @ts-ignore - We'll ignore type checking for the authorize function
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.log("Missing credentials");
+            return null;
+          }
+          
+          await connectDB();
+          
+          // Cast to any to avoid TypeScript errors with Mongoose
+          const userModel = User as any;
+          const user = await userModel.findOne({ email: credentials.email });
+          
+          if (!user) {
+            console.log("User not found");
+            return null;
+          }
+          
+          const isPasswordMatch = await compare(
+            credentials.password,
+            user.password
+          );
+          
+          if (!isPasswordMatch) {
+            console.log("Password doesn't match");
+            return null;
+          }
+          
+          console.log("Auth successful for:", user.email);
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
           return null;
         }
-        
-        await connectDB();
-        
-        const user = await User.findOne({ email: credentials.email });
-        
-        if (!user) {
-          return null;
-        }
-        
-        const isPasswordMatch = await compare(
-          credentials.password,
-          user.password
-        );
-        
-        if (!isPasswordMatch) {
-          return null;
-        }
-        
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        };
       },
     }),
   ],
   callbacks: {
-    // @ts-ignore - We'll ignore type checking for the jwt callback
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    // @ts-ignore - We'll ignore type checking for the session callback
-    session({ session, token }) {
+    session({ session, token }: { session: any; token: any }) {
       if (token && session.user) {
-        session.user.id = token.id as string;
+        session.user.id = token.id;
       }
       return session;
     },
@@ -89,8 +97,8 @@ export const authConfig: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
 };
 
-const handler = NextAuth(authConfig);
-
-export { handler as GET, handler as POST, handler as auth }; 
+// Export just the auth function
+export const auth = NextAuth(authConfig).auth; 
