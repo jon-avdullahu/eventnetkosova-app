@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function AuthErrorPage() {
+// Component to handle the search params in a suspense boundary
+function ErrorContent() {
   const searchParams = useSearchParams();
   const [errorType, setErrorType] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -45,40 +46,60 @@ export default function AuthErrorPage() {
   }, [searchParams]);
 
   return (
+    <div className="text-center">
+      <h1 className="text-3xl font-bold text-red-600">Authentication Error</h1>
+      <div className="mt-4 p-4 bg-red-50 rounded-md border-l-4 border-red-500">
+        <p className="text-lg font-medium text-red-700">Error Type: {errorType || "Unknown"}</p>
+        <p className="mt-2 text-red-600">{errorMessage}</p>
+      </div>
+      
+      <div className="mt-8 space-y-4">
+        <p className="text-gray-600">Here are some things you can try:</p>
+        <ul className="list-disc text-left ml-8 text-gray-600 space-y-2">
+          <li>Double-check your email and password</li>
+          <li>Clear your browser cookies and try again</li>
+          <li>Try with a different browser</li>
+          <li>Contact support if the issue persists</li>
+        </ul>
+      </div>
+      
+      <div className="mt-8 flex flex-col space-y-3">
+        <Link 
+          href="/login" 
+          className="w-full bg-primary py-2 px-4 rounded-md text-white font-medium hover:bg-opacity-90"
+        >
+          Back to Login
+        </Link>
+        <Link 
+          href="/" 
+          className="w-full bg-gray-200 py-2 px-4 rounded-md text-gray-800 font-medium hover:bg-gray-300"
+        >
+          Go to Home Page
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// Loading fallback
+function ErrorLoading() {
+  return (
+    <div className="text-center">
+      <h1 className="text-3xl font-bold text-red-600">Authentication Error</h1>
+      <div className="mt-4 p-4 bg-red-50 rounded-md">
+        <p className="text-lg font-medium text-red-700">Loading error information...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-12 bg-gray-50">
       <div className="w-full max-w-md space-y-8 p-8 bg-white rounded-xl shadow-md">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-red-600">Authentication Error</h1>
-          <div className="mt-4 p-4 bg-red-50 rounded-md border-l-4 border-red-500">
-            <p className="text-lg font-medium text-red-700">Error Type: {errorType || "Unknown"}</p>
-            <p className="mt-2 text-red-600">{errorMessage}</p>
-          </div>
-          
-          <div className="mt-8 space-y-4">
-            <p className="text-gray-600">Here are some things you can try:</p>
-            <ul className="list-disc text-left ml-8 text-gray-600 space-y-2">
-              <li>Double-check your email and password</li>
-              <li>Clear your browser cookies and try again</li>
-              <li>Try with a different browser</li>
-              <li>Contact support if the issue persists</li>
-            </ul>
-          </div>
-          
-          <div className="mt-8 flex flex-col space-y-3">
-            <Link 
-              href="/login" 
-              className="w-full bg-primary py-2 px-4 rounded-md text-white font-medium hover:bg-opacity-90"
-            >
-              Back to Login
-            </Link>
-            <Link 
-              href="/" 
-              className="w-full bg-gray-200 py-2 px-4 rounded-md text-gray-800 font-medium hover:bg-gray-300"
-            >
-              Go to Home Page
-            </Link>
-          </div>
-        </div>
+        <Suspense fallback={<ErrorLoading />}>
+          <ErrorContent />
+        </Suspense>
       </div>
     </div>
   );
