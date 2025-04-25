@@ -36,33 +36,38 @@ export const authConfig: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
+          console.log("[NextAuth] Auth attempt for:", credentials?.email);
+          
           if (!credentials?.email || !credentials?.password) {
-            console.log("Missing credentials");
+            console.error("[NextAuth] Missing credentials");
             return null;
           }
           
           await connectDB();
+          console.log("[NextAuth] DB connection established");
           
           // Use as any to avoid type issues
           const userModel = User as any;
           const user = await userModel.findOne({ email: credentials.email });
           
           if (!user) {
-            console.log("User not found");
+            console.error("[NextAuth] User not found:", credentials.email);
             return null;
           }
           
+          console.log("[NextAuth] User found, checking password");
           const isPasswordMatch = await compare(
             credentials.password,
             user.password
           );
           
           if (!isPasswordMatch) {
-            console.log("Password doesn't match");
+            console.error("[NextAuth] Password doesn't match for:", credentials.email);
             return null;
           }
           
-          console.log("Auth successful for:", user.email);
+          console.log("[NextAuth] Auth successful for:", credentials.email);
+          
           return {
             id: user._id.toString(),
             name: user.name,
@@ -70,21 +75,23 @@ export const authConfig: NextAuthOptions = {
             image: user.image,
           };
         } catch (error) {
-          console.error("Auth error:", error);
+          console.error("[NextAuth] Auth error:", error);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
+        console.log("[NextAuth] JWT callback - Adding user data to token");
         token.id = user.id;
       }
       return token;
     },
-    session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (token && session.user) {
+        console.log("[NextAuth] Session callback - Adding user ID to session");
         session.user.id = token.id;
       }
       return session;
@@ -92,12 +99,25 @@ export const authConfig: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
+    error: "/auth/error",
   },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  debug: true,
+  logger: {
+    error(code, metadata) {
+      console.error("[NextAuth][error]", { code, metadata });
+    },
+    warn(code) {
+      console.warn("[NextAuth][warn]", code);
+    },
+    debug(code, metadata) {
+      console.log("[NextAuth][debug]", { code, metadata });
+    },
+  },
 };
 
 // Auth function to be used in middleware or server components

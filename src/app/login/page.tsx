@@ -1,24 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const { status } = useSession();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/");
-    }
-  }, [status, router]);
+  const [debugInfo, setDebugInfo] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,44 +23,44 @@ export default function LoginPage() {
       setLoading(true);
       setError("");
       
-      console.log("Attempting to sign in with:", email);
+      // Log attempt
+      console.log("Login attempt with:", email);
       
+      // Create debug info
+      const debugData = {
+        timestamp: new Date().toISOString(),
+        email,
+        attemptTime: Date.now()
+      };
+      
+      // Perform login
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
       
-      console.log("Sign in result:", result);
+      // Update debug info
+      debugData.result = result;
+      debugData.responseTime = Date.now();
+      setDebugInfo(debugData);
+      
+      console.log("Login response:", result);
       
       if (result?.error) {
-        setError(result.error || "Invalid email or password");
-        return;
-      }
-      
-      // Set success state instead of immediate redirect
-      if (result?.ok) {
-        setSuccess(true);
-        // Delay redirect to show success message
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
+        setError(result.error || "Login failed");
+      } else if (result?.ok) {
+        setError("");
+        // Redirect will happen via client-side router after component remounts with new session
       }
     } catch (error) {
       console.error("Login error:", error);
       setError("Something went wrong. Please try again.");
+      setDebugInfo({ error: String(error) });
     } finally {
       setLoading(false);
     }
   };
-
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-12">
@@ -82,12 +73,6 @@ export default function LoginPage() {
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-4">
             <p className="text-red-700">{error}</p>
-          </div>
-        )}
-        
-        {success && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 mt-4">
-            <p className="text-green-700">Login successful! Redirecting...</p>
           </div>
         )}
         
@@ -131,10 +116,10 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              disabled={loading || success}
+              disabled={loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-400"
             >
-              {loading ? "Signing in..." : success ? "Success!" : "Sign in"}
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
           
@@ -147,6 +132,12 @@ export default function LoginPage() {
             </div>
           </div>
         </form>
+        
+        {debugInfo && (
+          <div className="mt-6 text-xs bg-gray-100 p-4 rounded overflow-auto max-h-40">
+            <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </div>
   );

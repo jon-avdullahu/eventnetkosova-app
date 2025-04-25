@@ -1,14 +1,14 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import AuthProvider from "@/components/AuthProvider";
 import Header from "@/components/Header";
+import Providers from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EventNet Kosovo - Event Connectivity Solutions",
-  description: "Pre-configured mesh routers that auto-connect with a web dashboard for monitoring. Perfect for events, construction sites, and temporary venues.",
+  title: "EventNet Kosova",
+  description: "Plan, organize, and attend events in Kosovo.",
 };
 
 export default function RootLayout({
@@ -19,10 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
+        <Providers>
           <Header />
-          <main>{children}</main>
-        </AuthProvider>
+          <main className="mt-16">{children}</main>
+        </Providers>
       </body>
     </html>
   );
