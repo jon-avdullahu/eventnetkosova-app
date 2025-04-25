@@ -1,10 +1,11 @@
+import NextAuth from "next-auth";
 import { authConfig } from "@/auth";
-import NextAuth from "next-auth/next";
 
-// Create a more explicit handler for NextAuth
+// Create a handler that works with App Router
 const handler = NextAuth(authConfig);
 
-// Export the handlers with explicit runtime configuration
-export const GET = handler;
-export const POST = handler;
+// Export the handler's GET and POST functions
+export { handler as GET, handler as POST };
+
+// Force NodeJS runtime
 export const runtime = "nodejs"; 
