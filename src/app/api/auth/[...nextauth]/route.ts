@@ -4,39 +4,39 @@ import { authConfig } from "@/auth";
 // Create a handler that works with App Router
 const handler = NextAuth(authConfig);
 
-// Use more explicit handler exports
+// Handle all necessary HTTP methods
 export async function GET(request: Request) {
-  try {
-    return await handler.auth(request);
-  } catch (error) {
-    console.error('NextAuth GET error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  }
+  return await handler.auth(request);
 }
 
 export async function POST(request: Request) {
-  try {
-    return await handler.auth(request);
-  } catch (error) {
-    console.error('NextAuth POST error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  }
+  return await handler.auth(request);
+}
+
+export async function PUT(request: Request) {
+  return await handler.auth(request);
+}
+
+export async function DELETE(request: Request) {
+  return await handler.auth(request);
+}
+
+export async function HEAD(request: Request) {
+  return await handler.auth(request);
+}
+
+export async function PATCH(request: Request) {
+  return await handler.auth(request);
+}
+
+export async function OPTIONS(request: Request) {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Allow': 'GET, POST, PUT, DELETE, HEAD, PATCH, OPTIONS',
+      'Content-Length': '0',
+    },
+  });
 }
 
 // Force NodeJS runtime
